@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Notebook;
+use App\Models\Product;
 use App\Models\User;
 use Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,7 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class NotebookTest extends TestCase
+class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,10 +22,10 @@ class NotebookTest extends TestCase
     }
 
 
-    public function testNotebookIndex(): void
+    public function testProductIndex(): void
     {
-        $notebook = Notebook::factory()->count(50)->create();
-        $response = $this->get('api/v1/notebook?page=2');//<-KISS
+        $Product = Product::factory()->count(50)->create();
+        $response = $this->get('api/v1/Product?page=2');//<-KISS
        
         
         dump($response->json()['meta']['current_page']);
@@ -33,25 +33,25 @@ class NotebookTest extends TestCase
         //->assertValid();
     }
 
-    public function testNotebookShow(): void
+    public function testProductShow(): void
     {
-        $notebook = Notebook::factory()->create();
+        $Product = Product::factory()->create();
 
-        $response = $this->get(route('notebook.show', $notebook));
+        $response = $this->get(route('Product.show', $Product));
 
         $response->assertStatus(200);
     }
 
-    public function testNotebookCreate(): void
+    public function testProductCreate(): void
     {
 
-        $notebook = Notebook::factory()->make();
+        $Product = Product::factory()->make();
         $response = $this->post(
-            route('notebook.store'),
+            route('Product.store'),
             [
                 'image' => UploadedFile::fake()->image('avatar.jpg')
             ] +
-                $notebook->getAttributes()
+                $Product->getAttributes()
         )
             ->assertCreated()
             ->assertJsonStructure([
@@ -66,23 +66,23 @@ class NotebookTest extends TestCase
                 ]
             ]);
 
-        Notebook::findOrFail($response->json('data.id'));
+        Product::findOrFail($response->json('data.id'));
     }
 
     /**
-     * @dataProvider NotebookFieldsProvider
+     * @dataProvider ProductFieldsProvider
      */
-    public function testNotebookUpdate(string $field, mixed $value): void
+    public function testProductUpdate(string $field, mixed $value): void
     {
 
-        $notebook = Notebook::factory()->create();
+        $Product = Product::factory()->create();
         $response = $this->patch(
-            route('notebook.update', $notebook->getKey()),
+            route('Product.update', $Product->getKey()),
             array_merge(
                 [
                     'image' => UploadedFile::fake()->image('avatar.jpg')
                 ],
-                $notebook->getAttributes(),
+                $Product->getAttributes(),
                 [
                     $field => $value
                 ]
@@ -102,15 +102,15 @@ class NotebookTest extends TestCase
             ]);
     }
 
-    public function testNotebookDelete(): void
+    public function testProductDelete(): void
     {
-        $notebook = Notebook::factory()->create();
+        $Product = Product::factory()->create();
 
-        $response = $this->delete(route('notebook.destroy', $notebook->getKey()));
+        $response = $this->delete(route('Product.destroy', $Product->getKey()));
         $response->assertOk();
     }
 
-    public static function NotebookFieldsProvider(): Generator
+    public static function ProductFieldsProvider(): Generator
     {
         yield 'empty file' => ['image', null];
     }

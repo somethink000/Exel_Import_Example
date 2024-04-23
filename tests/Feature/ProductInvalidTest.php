@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Notebook;
+use App\Models\Product;
 use Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
-class NotebookInvalidTest extends TestCase
+class ProductInvalidTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,18 +22,18 @@ class NotebookInvalidTest extends TestCase
 
 
     /**
-     * @dataProvider invalidNotebookFieldsProvider
+     * @dataProvider invalidProductFieldsProvider
      */
-    public function testNotebookCreateInvalid(string $field, mixed $value): void
+    public function testProductCreateInvalid(string $field, mixed $value): void
     {
-        $notebook = Notebook::factory()->make();
+        $Product = Product::factory()->make();
         $response = $this->post(
-            route('notebook.store'),
+            route('Product.store'),
             array_merge(
                 [
                     'image' => UploadedFile::fake()->image('avatar.jpg')
                 ],
-                $notebook->getAttributes(),
+                $Product->getAttributes(),
                 [
                     $field => $value
                 ]
@@ -43,19 +43,19 @@ class NotebookInvalidTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidNotebookFieldsProvider
+     * @dataProvider invalidProductFieldsProvider
      */
-    public function testNotebookUpdateInvalid(string $field, mixed $value): void
+    public function testProductUpdateInvalid(string $field, mixed $value): void
     {
 
-        $notebook = Notebook::factory()->create();
+        $Product = Product::factory()->create();
         $response = $this->patch(
-            route('notebook.update', $notebook->getKey()),
+            route('Product.update', $Product->getKey()),
             array_merge(
                 [
                     'image' => UploadedFile::fake()->image('avatar.jpg')
                 ],
-                $notebook->getAttributes(),
+                $Product->getAttributes(),
                 [
                     $field => $value
                 ]
@@ -64,7 +64,7 @@ class NotebookInvalidTest extends TestCase
             ->assertInvalid();
     }
 
-    public static function invalidNotebookFieldsProvider(): Generator
+    public static function invalidProductFieldsProvider(): Generator
     {
         yield 'invalid name' => ['name', 212];
         yield 'invalid company' => ['company', 'a'];

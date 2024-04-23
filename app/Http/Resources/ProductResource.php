@@ -2,17 +2,17 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Notebook;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 
 
 /** 
- * @property Notebook $resource
- * @mixin Notebook
+ * @property Product $resource
+ * @mixin Product
  */
-class NotebookResource extends JsonResource
+class ProductResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
