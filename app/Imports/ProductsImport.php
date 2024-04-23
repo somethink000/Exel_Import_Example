@@ -94,14 +94,16 @@ class ProductsImport implements ToModel
         } 
 
         $cur = $this->curentRow;
-
+        //return Product::create($data);
+        //var_dump($row[$cur['Наименование']]);
         return new Product([
-
             'name' => $row[$cur['Наименование']],
             'description'=>$row[$cur['Описание']],
             'price'=>$row[$cur['Цена: Цена продажи']],
             'discount'=>$row[$cur['Запретить скидки при продаже в розницу']],
             //=>$row[$cur[]],
         ]);
+
+
     }
 }
