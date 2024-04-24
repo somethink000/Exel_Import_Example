@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $products = ProductResource::collection(Product::paginate(10));
+        $products = ProductResource::collection(Product::paginate(25));
 
         return view('products',compact('products'));
     }
@@ -37,11 +37,6 @@ class ProductController extends Controller
         $product = new ProductResource($Product);
 
         return view('show_product',compact('product')); 
-    }
-
-    public function destroy(Product $Product): ?bool
-    {
-        return $this->ProductService->destroy($Product);
     }
 
     //Main
@@ -55,7 +50,7 @@ class ProductController extends Controller
     {
         Excel::import(new ProductsImport, $request->file('products'));
 
-        //return back()->with('massage', 'User Imported Successfully');
+        return redirect('/'); 
     }
 
     

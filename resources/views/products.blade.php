@@ -13,7 +13,7 @@
                     <div class="col mb-5">
                         <div class="card h-100">
                             
-                            <a href="{{route('product.show', $item)}}" target="_blank">
+                            <a href={{route('product.show', $item)}} target="_blank">
                                 <img class="card-img-top" src={{$item->images[0]->image}} alt="..." />
                             </a>
 

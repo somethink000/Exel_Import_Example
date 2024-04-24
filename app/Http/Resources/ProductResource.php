@@ -25,12 +25,11 @@ class ProductResource extends JsonResource
             $this->resource->getAttributes(),
             [
                 'id',
+               // 'external_code',
                 'name',
-                'company',
-                'phone',
-                'email',
-                'birthday',
-                'image'
+                'description',
+                'price',
+                'discount',
             ]
         );
     }

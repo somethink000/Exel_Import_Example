@@ -10,6 +10,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
 
 class ProductTest extends TestCase
 {
@@ -22,96 +24,28 @@ class ProductTest extends TestCase
     }
 
 
-    public function testProductIndex(): void
+    public function user_can_import_users() 
     {
-        $Product = Product::factory()->count(50)->create();
-        $response = $this->get('api/v1/Product?page=2');//<-KISS
-       
         
-        dump($response->json()['meta']['current_page']);
-        $response->assertStatus(200);
-        //->assertValid();
+        Excel::fake();
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/users/import/xlsx');
+        
+        Excel::assertImported('filename.xlsx', 'diskName');
+        
+        Excel::assertImported('filename.xlsx', 'diskName', function(ProductsImport $import) {
+            return true;
+        });
+        
+        // When passing the callback as 2nd param, the disk will be the default disk.
+        Excel::assertImported('filename.xlsx', function(ProductsImport $import) {
+            return true;
+        });
     }
 
-    public function testProductShow(): void
-    {
-        $Product = Product::factory()->create();
+   
 
-        $response = $this->get(route('Product.show', $Product));
-
-        $response->assertStatus(200);
-    }
-
-    public function testProductCreate(): void
-    {
-
-        $Product = Product::factory()->make();
-        $response = $this->post(
-            route('Product.store'),
-            [
-                'image' => UploadedFile::fake()->image('avatar.jpg')
-            ] +
-                $Product->getAttributes()
-        )
-            ->assertCreated()
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'name',
-                    'company',
-                    'phone',
-                    'email',
-                    'birthday',
-                    'image'
-                ]
-            ]);
-
-        Product::findOrFail($response->json('data.id'));
-    }
-
-    /**
-     * @dataProvider ProductFieldsProvider
-     */
-    public function testProductUpdate(string $field, mixed $value): void
-    {
-
-        $Product = Product::factory()->create();
-        $response = $this->patch(
-            route('Product.update', $Product->getKey()),
-            array_merge(
-                [
-                    'image' => UploadedFile::fake()->image('avatar.jpg')
-                ],
-                $Product->getAttributes(),
-                [
-                    $field => $value
-                ]
-            )
-        )
-            ->assertOk()
-            ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'name',
-                    'company',
-                    'phone',
-                    'email',
-                    'birthday',
-                    'image'
-                ]
-            ]);
-    }
-
-    public function testProductDelete(): void
-    {
-        $Product = Product::factory()->create();
-
-        $response = $this->delete(route('Product.destroy', $Product->getKey()));
-        $response->assertOk();
-    }
-
-    public static function ProductFieldsProvider(): Generator
-    {
-        yield 'empty file' => ['image', null];
-    }
 }
