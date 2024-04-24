@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
@@ -23,12 +24,16 @@ class Product extends Model
         parent::boot();
 
         self::creating(function($model){
-            //var_dump(Str::uuid());
-            //dd($model->external_code = Str::uuid());
-            //$model->external_code = Str::uuid();
+            
+            
+            if ( !$model->external_code ) // || $model->where('external_code', $model->external_code)->exists() 
+            {
+                $model->external_code = Str::uuid();
+            }
         });
 
     }
+
 
     public function feature(){
         
