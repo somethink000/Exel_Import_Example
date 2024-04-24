@@ -3,16 +3,57 @@
 
 @section('content')
 
-    <div class="col-md-4">
-        <div class="thumbnail">
-            @foreach ($product->images as $item)
-                <img src={{$item->image}} alt="Nature" style="width:100%">
-            @endforeach
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                
+
+
+
+                <div id="carouselExample" class="carousel slide col-md-6">
+                    <div class="carousel-inner">
+
+                        @foreach ($product->images as $k => $item)
+
+                            @if ($k == 0)
+                                <div class="carousel-item active">
+                            @else
+                                <div class="carousel-item">
+                            @endif
+
+                                <img src={{$item->image}} class="d-block w-100" alt="...">
+                            </div>
+
+                        @endforeach 
+                      
+                    </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+
+
+                
+               
+                <div class="col-md-6">
             
-            <div class="caption">
-                <h5>{{$product->name}}</h5>
-                <p>{{$product->price}}.руб</p>
+                    <h1 class="display-5 fw-bolder">{{$product->name}}</h1>
+                    <div class="fs-5 mb-5">
+                        <span>{{$product->price}} руб</span>
+                    </div>
+                    <p class="lead">{{$product->description}}</p>
+                    
+                </div>
             </div>
+        
+
 
             @php
                 $fe = $product->feature;
@@ -38,15 +79,29 @@
                     'Категория товара' =>$fe->category,  
                 ]
             @endphp
-           
-          
-           @foreach ($specifications as $k => $item)
-               <p>{{$k}} - {{$item}}</p>
-           @endforeach
+
+            <h3 class="pt-5">Характеристики товара:</h3>
+            <table class="table">
+                <tbody>
+                    @foreach ($specifications as $k => $item)
+                        <tr>
+                            <td>{{$k}}</td>
+                            <td>{{$item}}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
 
             
+
+
         </div>
-    </div>
+    </section>
+
+
+    
+    
+
 
 @endsection
 
