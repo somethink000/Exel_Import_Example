@@ -32,9 +32,11 @@ class ProductController extends Controller
         return view('products',compact('products'));
     }
 
-    public function show(Product $Product): ProductResource
+    public function show(Product $Product)
     {
-        return new ProductResource($Product);
+        $product = new ProductResource($Product);
+
+        return view('show_product',compact('product')); 
     }
 
     public function destroy(Product $Product): ?bool
@@ -52,9 +54,6 @@ class ProductController extends Controller
     public function import(Request $request)
     {
         Excel::import(new ProductsImport, $request->file('users'));
-
-        // dd($request->file('users'));
-
 
         // return back()->with('massage', 'User Imported Successfully');
     }
