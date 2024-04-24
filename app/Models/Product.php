@@ -15,4 +15,12 @@ class Product extends Model
         'price',
         'discount',
     ];
+
+    public function features(){
+        return $this->belongsTo(ProductFeature::class,'product_id');
+    }
+
+    public function images(){
+        return $this->hasMany(ProductImage::class,'product_id');
+    }
 }

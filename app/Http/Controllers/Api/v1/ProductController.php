@@ -53,9 +53,9 @@ class ProductController extends Controller
 
     public function import(Request $request)
     {
-        Excel::import(new ProductsImport, $request->file('users'));
+        Excel::import(new ProductsImport, $request->file('products'));
 
-        // return back()->with('massage', 'User Imported Successfully');
+        //return back()->with('massage', 'User Imported Successfully');
     }
 
     

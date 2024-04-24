@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Product;
 use App\Models\ProductFeature;
+use App\Models\ProductImage;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
 
@@ -95,10 +96,9 @@ class ProductsImport implements ToModel
         } 
 
         $cur = $this->curentRow;
-        //return Product::create($data);
-        //var_dump($row[$cur['Наименование']]);
+       
 
-        Product::create([
+        $newProd = Product::create([
             'name' => $row[$cur['Наименование']],
             'description'=>$row[$cur['Описание']],
             'price'=>$row[$cur['Цена: Цена продажи']],
@@ -107,9 +107,9 @@ class ProductsImport implements ToModel
         ]);
 
 
-        // dd($newProduct);
+
         ProductFeature::create([
-            'product_id'=>1,
+            'product_id'=>$newProd->id,
             'size'=>$row[$cur['Доп. поле: Размер']],
             'color'=>$row[$cur['Доп. поле: Цвет']],
             'brand'=>$row[$cur['Доп. поле: Бренд']],
@@ -131,13 +131,17 @@ class ProductsImport implements ToModel
             'category'=>$row[$cur['Доп. поле: Категория товара']],
         ]);
 
-        // $newProductImage = new Product([
-        //     'name' => $row[$cur['Наименование']],
-        //     'description'=>$row[$cur['Описание']],
-        //     'price'=>$row[$cur['Цена: Цена продажи']],
-        //     'discount'=>$row[$cur['Запретить скидки при продаже в розницу']],
-        //     //=>$row[$cur[]],
-        // ]);
+        
+
+        foreach (explode(",", $row[$cur['Доп. поле: Ссылки на фото']]) as $item) 
+        {
+            ProductImage::create([
+                'product_id'=>$newProd->id,
+                'image'=>$item,
+            ]);
+        }
+        
+
 
 
         return;
