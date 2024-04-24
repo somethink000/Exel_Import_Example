@@ -1,6 +1,8 @@
 
 
+    
 
+    код импорта - App\Imports\ProductsImport 
 
 <p align="center">
     <img width="1000px" src="/exmpl1.png" alt="qr"/>

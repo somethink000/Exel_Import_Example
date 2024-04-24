@@ -4,35 +4,26 @@ namespace Tests\Feature;
 
 use App\Models\Product;
 use App\Models\User;
-use Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductsImport;
 
+
 class ProductTest extends TestCase
 {
-    use RefreshDatabase;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-        Storage::fake();
-    }
-
-
-    public function user_can_import_users() 
+   
+    public function test_example(): void
     {
         
         Excel::fake();
 
-        $user = User::factory()->create();
+        // $user = User::factory()->create();
 
-        $this->actingAs($user)
-            ->get('/users/import/xlsx');
+        // $this->actingAs($user)
+        //     ->get('/users/import/xlsx');
         
         Excel::assertImported('filename.xlsx', 'diskName');
         
@@ -46,6 +37,5 @@ class ProductTest extends TestCase
         });
     }
 
-   
 
 }
