@@ -16,7 +16,7 @@ class ProductsImport implements ToModel
     * @return \Illuminate\Database\Eloquent\Model|null
     */
     private $first = true;
-    public $headerRow = array();
+    private $headerRow = array();
         
     //распределение первой строки на ключи
     private function parseImportData(array $data)
@@ -37,9 +37,20 @@ class ProductsImport implements ToModel
             return; 
         } 
 
-        //создание таблиц по ключам из первой строки
+        
         $cur = $this->headerRow;
         
+
+        //создание таблиц по ключам из первой строки
+
+        
+      
+        if (Product::where('external_code', $row[$cur['UUID']])->exists() == true)
+        {
+            dd("Данный UUID: |".$row[$cur['UUID']]."| Товара: |".$row[$cur['Наименование']]."| уже используется");
+            return;
+        }
+
         
 
         $newProd = Product::create([
@@ -48,7 +59,6 @@ class ProductsImport implements ToModel
             'description'=>$row[$cur['Описание']],
             'price'=>$row[$cur['Цена: Цена продажи']],
             'discount'=>$row[$cur['Запретить скидки при продаже в розницу']],
-            //=>$row[$cur[]],
         ]);
 
 
