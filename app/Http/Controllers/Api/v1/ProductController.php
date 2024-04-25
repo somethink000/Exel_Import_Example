@@ -41,9 +41,10 @@ class ProductController extends Controller
 
     public function import(ProductImportRequest $request)
     {
+
         Excel::import(new ProductsImport, $request->file('file'));
 
-        return redirect('/'); 
+        //return redirect('/'); 
     }
 
     

@@ -17,7 +17,7 @@ class ProductsImport implements ToModel
     */
     private $first = true;
     private $headerRow = array();
-        
+    
     //распределение первой строки на ключи
     private function parseImportData(array $data)
     {
@@ -29,6 +29,7 @@ class ProductsImport implements ToModel
 
     public function model(array $row)
     {
+        
         //парсинг первой строки
         if ($this->first) 
         {
@@ -43,15 +44,15 @@ class ProductsImport implements ToModel
 
         //создание таблиц по ключам из первой строки
 
-        
-      
         if (Product::where('external_code', $row[$cur['UUID']])->exists() == true)
         {
+            //i know this can be mutch beter ->>
             dd("Данный UUID: |".$row[$cur['UUID']]."| Товара: |".$row[$cur['Наименование']]."| уже используется");
             return;
         }
 
         
+
 
         $newProd = Product::create([
             'external_code'=> $row[$cur['UUID']],

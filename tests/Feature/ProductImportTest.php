@@ -10,26 +10,30 @@ use Tests\TestCase;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\ProductsImport;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Http\File;
 
 class ProductImportTest extends TestCase
 {
 
-   
-    public function test_exel_import(): void
+    use RefreshDatabase;
+
+    public function setUp(): void
     {
-        
+        parent::setUp();
         Excel::fake();
         Storage::fake();
+    }
 
+    public function test_exel_import(): void
+    {
 
-        $response = Excel::import(new ProductsImport, base_path('tests/import example.xlsx'));
+        $response = $this->post(route('import'), 
+            ['file' => new File(base_path('tests/import example.xlsx'))]
+        );
         
+        $response->assertOk();
 
-        dd($response);
-
-
-        // $this->assertTrue(true);
-        
     }
 
 
