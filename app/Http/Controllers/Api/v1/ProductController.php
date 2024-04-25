@@ -44,7 +44,7 @@ class ProductController extends Controller
 
         Excel::import(new ProductsImport, $request->file('file'));
 
-        //return redirect('/'); 
+        return view('import');
     }
 
     
